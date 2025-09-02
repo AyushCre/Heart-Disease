@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Predictor</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+        <!-- Header Section -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Heart Disease Prediction System</h1>
+            <p class="mt-2 text-md text-gray-600">Enter the patient's information below to predict the likelihood of heart disease.</p>
+        </header>
+
+        <!-- Main Form for Patient Data Input -->
+        <main class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+            <form id="prediction-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Input field for Age -->
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700">Age (years)</label>
+                    <input type="number" id="age" name="age" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="e.g., 52">
+                </div>
+
+                <!-- Input field for Sex -->
+                <div>
+                    <label for="sex" class="block text-sm font-medium text-gray-700">Sex</label>
+                    <select id="sex" name="sex" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+
+                <!-- Input field for Chest Pain Type -->
+                <div>
+                    <label for="cp" class="block text-sm font-medium text-gray-700">Chest Pain Type</label>
+                    <select id="cp" name="cp" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="1">Typical Angina</option>
+                        <option value="2">Atypical Angina</option>
+                        <option value="3">Non-anginal Pain</option>
+                        <option value="4">Asymptomatic</option>
+                    </select>
+                </div>
+
+                <!-- Input field for Resting Blood Pressure -->
+                <div>
+                    <label for="trestbps" class="block text-sm font-medium text-gray-700">Resting BP (mm Hg)</label>
+                    <input type="number" id="trestbps" name="trestbps" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="e.g., 120">
+                </div>
+
+                <!-- Input field for Serum Cholesterol -->
+                <div>
+                    <label for="chol" class="block text-sm font-medium text-gray-700">Cholesterol (mg/dl)</label>
+                    <input type="number" id="chol" name="chol" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="e.g., 211">
+                </div>
+
+                <!-- Input field for Fasting Blood Sugar -->
+                <div>
+                    <label for="fbs" class="block text-sm font-medium text-gray-700">Fasting Blood Sugar</label>
+                    <select id="fbs" name="fbs" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="1">&gt; 120 mg/dL</option>
+                        <option value="0">&lt;= 120 mg/dL</option>
+                    </select>
+                </div>
+
+                <!-- Input field for Resting ECG -->
+                <div>
+                    <label for="restecg" class="block text-sm font-medium text-gray-700">Resting ECG</label>
+                    <select id="restecg" name="restecg" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="0">Normal</option>
+                        <option value="1">ST-T wave abnormality</option>
+                        <option value="2">Left ventricular hypertrophy</option>
+                    </select>
+                </div>
+
+                <!-- Input field for Max Heart Rate -->
+                <div>
+                    <label for="thalach" class="block text-sm font-medium text-gray-700">Max Heart Rate</label>
+                    <input type="number" id="thalach" name="thalach" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="e.g., 142">
+                </div>
+
+                <!-- Input field for Exercise Induced Angina -->
+                <div>
+                    <label for="exang" class="block text-sm font-medium text-gray-700">Exercise Induced Angina</label>
+                    <select id="exang" name="exang" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <!-- Input field for Oldpeak -->
+                <div>
+                    <label for="oldpeak" class="block text-sm font-medium text-gray-700">Oldpeak</label>
+                    <input type="number" step="0.1" id="oldpeak" name="oldpeak" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="e.g., 1.8">
+                </div>
+
+                <!-- Input field for ST Slope -->
+                <div>
+                    <label for="slope" class="block text-sm font-medium text-gray-700">ST Slope</label>
+                    <select id="slope" name="slope" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="1">Upsloping</option>
+                        <option value="2">Flat</option>
+                        <option value="3">Downsloping</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="md:col-span-2 lg:col-span-3 text-center mt-4">
+                    <button type="submit" class="w-full sm:w-auto inline-flex justify-center py-3 px-8 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
+                        Predict
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <!-- Prediction Result Section -->
+        <section id="result-section" class="mt-8 text-center hidden">
+            <h2 class="text-2xl font-semibold text-gray-900">Prediction Result</h2>
+            <div id="result-box" class="mt-4 p-6 rounded-2xl text-white text-xl font-bold transition-all duration-300">
+                <p id="result-text"></p>
+                <p id="probability-text" class="text-sm font-normal mt-1"></p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Get references to the form and result elements
+        const form = document.getElementById('prediction-form');
+        const resultSection = document.getElementById('result-section');
+        const resultBox = document.getElementById('result-box');
+        const resultText = document.getElementById('result-text');
+        const probabilityText = document.getElementById('probability-text');
+
+        /**
+         * SIMULATED MACHINE LEARNING MODEL
+         * ---------------------------------
+         * This section simulates a pre-trained Logistic Regression model.
+         * In a real-world scenario, these 'weights' and 'bias' values would be
+         * the result of training a model on a large dataset.
+         * * The prediction is calculated using the formula:
+         * prediction = sigmoid( (w1*x1 + w2*x2 + ... + wn*xn) + bias )
+         * where 'w' are the weights and 'x' are the input feature values.
+         * * A positive weight means the feature increases the probability of heart disease,
+         * while a negative weight means it decreases the probability.
+         */
+        const model = {
+            // These weights are illustrative and chosen to be plausible.
+            weights: {
+                age: 0.03,      // Older age slightly increases risk
+                sex: 0.3,       // Male sex (1) increases risk
+                cp: 0.4,        // Higher chest pain type number (more atypical) increases risk
+                trestbps: 0.01, // Higher BP slightly increases risk
+                chol: 0.005,    // Higher cholesterol slightly increases risk
+                fbs: 0.1,       // High fasting blood sugar increases risk
+                restecg: 0.2,   // Abnormal ECG increases risk
+                thalach: -0.04, // Higher max heart rate decreases risk (better fitness)
+                exang: 0.5,     // Exercise-induced angina strongly increases risk
+                oldpeak: 0.6,   // ST depression strongly increases risk
+                slope: 0.4      // A flatter/downsloping ST segment increases risk
+            },
+            // The bias term adjusts the model's output.
+            bias: -10.5
+        };
+
+        // The sigmoid function converts a number into a probability (0 to 1).
+        function sigmoid(z) {
+            return 1 / (1 + Math.exp(-z));
+        }
+
+        // Handle form submission
+        form.addEventListener('submit', (event) => {
+            // Prevent the default browser action of reloading the page
+            event.preventDefault();
+
+            // Create a FormData object to easily access form values
+            const formData = new FormData(form);
+            const inputs = {};
+            for (let [key, value] of formData.entries()) {
+                // Convert all values to numbers
+                inputs[key] = parseFloat(value);
+            }
+
+            // --- Prediction Logic ---
+            // 1. Calculate the weighted sum of the inputs
+            let z = model.bias;
+            for (const feature in model.weights) {
+                if (inputs.hasOwnProperty(feature)) {
+                    z += model.weights[feature] * inputs[feature];
+                }
+            }
+
+            // 2. Apply the sigmoid function to get the probability
+            const probability = sigmoid(z);
+
+            // 3. Make a binary prediction based on a 0.5 threshold
+            const prediction = probability >= 0.5 ? 1 : 0;
+
+            // --- Display the result ---
+            displayResult(prediction, probability);
+        });
+
+        // Function to update the UI with the prediction result
+        function displayResult(prediction, probability) {
+            resultSection.classList.remove('hidden');
+            const probabilityPercent = (probability * 100).toFixed(2);
+
+            if (prediction === 1) {
+                // Positive prediction
+                resultBox.classList.remove('bg-green-500');
+                resultBox.classList.add('bg-red-500');
+                resultText.textContent = 'Heart Disease Detected';
+                probabilityText.textContent = `Model Confidence: ${probabilityPercent}%`;
+            } else {
+                // Negative prediction
+                resultBox.classList.remove('bg-red-500');
+                resultBox.classList.add('bg-green-500');
+                resultText.textContent = 'No Heart Disease Detected';
+                probabilityText.textContent = `Model Confidence: ${probabilityPercent}%`;
+            }
+            
+            // Scroll to the result for better user experience on small screens
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
