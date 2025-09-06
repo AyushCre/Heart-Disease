@@ -75,9 +75,3 @@ if st.button('Predict Heart Disease Risk', use_container_width=True):
     else:
         st.success(f"Low Risk of Heart Disease", icon="✅")
         st.write(f"Chance: **{probability[0][0]*100:.2f}%**")
-
-# TODO:
-# - add input validation
-# - maybe round numbers nicer
-# - check slope mapping
-# - style output better
