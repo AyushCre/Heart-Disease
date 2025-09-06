@@ -1,77 +1,69 @@
+# Import necessary libraries
 import streamlit as st
 import numpy as np
-import pandas as pd
 import joblib
 
-# load model (run train_model.py first if missing)
-try:
-    model = joblib.load('heart_disease_model.pkl')
-except FileNotFoundError:
-    st.error("model file not found — run train_model.py")
-    st.stop()
+# Load the trained model
+model = joblib.load('heart_disease_model.pkl')
 
-st.set_page_config(page_title="Heart Disease Predictor", page_icon="❤️")
+# Set the page title and icon
+st.set_page_config(page_title="Heart Disease Prediction", page_icon="❤️")
 
-st.title("❤️ Heart Disease Prediction App")
-st.write("""
-predicts heart disease risk — needs better text later
-""")
+# Page Title
+st.title('Heart Disease Prediction App ❤️')
 
-# layout
+# --- Input Fields for User Data ---
+st.header("Enter Patient's Details")
+
+# Layout with columns
 col1, col2, col3 = st.columns(3)
 
-# inputs
 with col1:
-    age = st.number_input('Age', min_value=1, max_value=120, value=50)
-    sex = st.selectbox('Sex', options=[('Male', 1), ('Female', 0)], format_func=lambda x: x[0])
-    cp = st.selectbox('Chest Pain Type', options=[
-        ('Typical Angina', 1),
-        ('Atypical Angina', 2),
-        ('Non-anginal Pain', 3),
-        ('Asymptomatic', 4)
-    ], format_func=lambda x: x[0])
+    age = st.number_input('Age', min_value=1, max_value=120, value=52)
+    sex = st.selectbox('Sex', ('Male', 'Female'))
+    cp = st.selectbox('Chest Pain Type', ('Typical Angina', 'Atypical Angina', 'Non-anginal Pain', 'Asymptomatic'))
+    trestbps = st.number_input('Resting Blood Pressure (mm Hg)', min_value=80, max_value=200, value=120)
 
 with col2:
-    trestbps = st.number_input('Resting Blood Pressure (mm Hg)', min_value=80, max_value=200, value=120)
-    chol = st.number_input('Serum Cholesterol (mg/dl)', min_value=100, max_value=600, value=200)
-    fbs = st.selectbox('Fasting Blood Sugar > 120 mg/dl', options=[('True', 1), ('False', 0)], format_func=lambda x: x[0])
+    chol = st.number_input('Serum Cholestoral (mg/dl)', min_value=100, max_value=600, value=200)
+    fbs = st.selectbox('Fasting Blood Sugar > 120 mg/dl', ('True', 'False'))
+    restecg = st.selectbox('Resting Electrocardiographic Results', ('Normal', 'ST-T wave abnormality', 'Left ventricular hypertrophy'))
+    thalach = st.number_input('Maximum Heart Rate Achieved', min_value=60, max_value=220, value=150)
 
 with col3:
-    restecg = st.selectbox('Resting ECG Results', options=[
-        ('Normal', 0),
-        ('ST-T Wave Abnormality', 1),
-        ('Left Ventricular Hypertrophy', 2)
-    ], format_func=lambda x: x[0])
-    thalach = st.number_input('Max Heart Rate Achieved', min_value=60, max_value=220, value=150)
-    exang = st.selectbox('Exercise Induced Angina', options=[('Yes', 1), ('No', 0)], format_func=lambda x: x[0])
+    exang = st.selectbox('Exercise Induced Angina', ('Yes', 'No'))
+    oldpeak = st.number_input('ST depression induced by exercise', min_value=0.0, max_value=10.0, value=1.0, step=0.1)
+    slope = st.selectbox('Slope of the peak exercise ST segment', ('Upsloping', 'Flat', 'Downsloping'))
 
-# oldpeak slider (check value range later)
-oldpeak = st.slider('ST Depression (Oldpeak)', min_value=0.0, max_value=6.2, value=1.0, step=0.1)
-slope = st.selectbox('Slope of Peak Exercise ST Segment', options=[
-    ('Upsloping', 1),
-    ('Flat', 2),
-    ('Downsloping', 3)
-], format_func=lambda x: x[0])
+# --- Prediction Button ---
+if st.button('Predict Heart Disease Risk'):
+    
+    # --- Data Conversion ---
+    # Convert categorical text inputs to numbers that the model understands
+    sex_num = 1 if sex == 'Male' else 0
+    fbs_num = 1 if fbs == 'True' else 0
+    exang_num = 1 if exang == 'Yes' else 0
 
-# prediction
-if st.button('Predict Heart Disease Risk', use_container_width=True):
-    # grab numeric vals from tuples
-    input_features = [
-        age, sex[1], cp[1], trestbps, chol, fbs[1],
-        restecg[1], thalach, exang[1], oldpeak, slope[1]
-    ]
-    
-    # DEBUG: print(input_features)
-    features_array = np.array(input_features).reshape(1, -1)
-    
-    prediction = model.predict(features_array)
-    probability = model.predict_proba(features_array)
-    
+    cp_map = {'Typical Angina': 0, 'Atypical Angina': 1, 'Non-anginal Pain': 2, 'Asymptomatic': 3}
+    cp_num = cp_map[cp]
+
+    restecg_map = {'Normal': 0, 'ST-T wave abnormality': 1, 'Left ventricular hypertrophy': 2}
+    restecg_num = restecg_map[restecg]
+
+    slope_map = {'Upsloping': 0, 'Flat': 1, 'Downsloping': 2}
+    slope_num = slope_map[slope]
+
+    # Create a numpy array with the converted numeric data
+    input_data = np.array([[age, sex_num, cp_num, trestbps, chol, fbs_num, restecg_num, thalach, exang_num, oldpeak, slope_num]])
+
+    # --- Make Prediction ---
+    prediction = model.predict(input_data)
+
+    # --- Display Result ---
     st.subheader("Prediction Result")
-    
     if prediction[0] == 1:
-        st.error(f"High Risk of Heart Disease", icon="⚠️")
-        st.write(f"Chance: **{probability[0][1]*100:.2f}%**")
+        st.error('High Risk of Heart Disease Detected 💔')
+        st.warning("Please consult a doctor for further evaluation and advice.")
     else:
-        st.success(f"Low Risk of Heart Disease", icon="✅")
-        st.write(f"Chance: **{probability[0][0]*100:.2f}%**")
+        st.success('Low Risk of Heart Disease Detected 💚')
+        st.info("Maintain a healthy lifestyle to keep your heart healthy.")
